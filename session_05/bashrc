@@ -22,7 +22,6 @@ alias mkdir='mkdir -p'  # no error if the directory already exists
 # force things
 alias rmf='rm -f'     # delete without prompting (careful!)
 alias rmrf='rm -rf'   # delete recursively without prompting (careful)
-alias rmdirf ='rmdir -f' #delete a directory without prompting (careful)
 
 alias h='history'  # shortcut for history
 alias j='jobs -l'  # list process IDs as well

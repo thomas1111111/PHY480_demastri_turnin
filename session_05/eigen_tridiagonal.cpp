@@ -139,6 +139,8 @@ main ()
       // Print out the results   
       // Allocate a pointer to one of the eigenvectors of the matrix 
       gsl_vector *eigenvector_ptr = gsl_vector_alloc (dimension);
+      
+      
       for (int i = 1; i <= dimension; i++)
 	{
 	  double eigenvalue = gsl_vector_get (Eigval_ptr, i - 1);
@@ -147,10 +149,8 @@ main ()
 	  // Print out the eigenvector with the lowest eigenvalue to a file
 	  if (i == 1)
 	    {
-	      eigout << "   " << N << "       " << eigenvalue << "        " <<
-              fabs ((eigenvalue - 1.5) / 1.5) << endl;
-
-	      N = N * 2;
+	      eigout << scientific << setprecision(4) << N*1. << " "<< setprecision(8) <<eigenvalue << "   " <<
+              setprecision(8) << fabs ((eigenvalue - 1.5) / 1.5) << endl;
 	    }
 	}
 
@@ -161,6 +161,7 @@ main ()
       gsl_matrix_free (Hmat_ptr);
       gsl_vector_free (eigenvector_ptr);
       gsl_eigen_symmv_free (worksp);
+      N = N*2;
     }
   return (0);			// successful completion 
 }
