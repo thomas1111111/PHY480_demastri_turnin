@@ -1,17 +1,22 @@
-//  file: area.cpp
+//  file: area_new.cpp
 //
-//  This program calculates the area of a circle, given the radius.
+//  Name: Thomas DeMastri; email: demastri@msu.edu
+//  
+//  compile with g++ -o area_new.x area_new.cpp
 //
-//  Programmer:  Dick Furnstahl  furnstahl.1@osu.edu
+//  Revision history
 //
-//  Revision history:
-//      02-Jan-2004  original version, for 780.20 Computational Physics
-//      01-Jan-2010  updates to "To do" wishlist
-//      12-Jan-2016  comment out "using namespace std;"
+//  2/6/20:
+//  	- Copied over from the file area.cpp in the session_01 package
+//	- let the user specify the precision with a cin statement (item one on to-do list)
+//  	- imported cmath, to do the second item on to-do list. Deleted the constant value of pi defined at the start.
+//	- implemented an inline square function with the help of activity 5 materials, used it in my area calculation
+//	- wrote a function for doing the area calculation.
 //
-//  Notes:  
-//   * compile with:  "g++ -o area.x area.cpp"
-//
+//	- For item number 5, i think having a user input is much easier that editing a file for reading in the radius and precision
+//	- It's now writing to a file area_new.dat with the radius, precision, and area labeled/provided.
+//	
+//	- For item 6, it now checks that radius and precision are positive numbers and makes sure that precision is an integer. 
 //  To do:
 //   1. output the answer with higher precision (more digits)
 //   2. use a "predefined" value of pi or generate it with atan
@@ -23,26 +28,62 @@
 //
 //*********************************************************************// 
 
+
+
+
+
 // include files
 #include <iostream>	     // this has the cout, cin definitions
-//using namespace std;     // if omitted, then need std::cout, std::cin 
+#include <iomanip>		// included for setprecision
+using namespace std;     // if omitted, then need std::cout, std::cin 
+#include <fstream>
+#include <cmath>
 
 //*********************************************************************//
 
-const double pi = 3.1415926535897932385;   // define pi as a constant 
+inline double //function which takes in a double and squares it
+sqr (double r)
+{
+  return r * r;
+};
+
+double
+area_calc (double r)
+{
+// splitting the calulation into a subroutine:
+	
+	return M_PI*sqr(r);
+		
+}
 
 int
 main ()
 {
-  double radius;    // every variable is declared as int or double or ...
+  double radius;    // every variable is declared as int or double or...
+  double precision; // delcare precision as an int
 
-  std::cout << "Enter the radius of a circle: ";	// ask for radius
-  std::cin >> radius;
+  cout << "Enter the radius of a circle: " << endl;	// ask for radius
+  cin >> radius;
+  cout << "Enter the precision you want your answer" << endl;
+  cin >> precision;
 
-  double area = pi * radius * radius;	// standard area formula
+  double tol = 1e-14;
 
-  std::cout << "radius = " << radius << ",  area = " << area <<std::endl;
+  if ((radius> 0)&&(precision>0)&&(fabs(precision-int(precision))<tol)) //check that we have numbers that are valid
+  {
+  ofstream aout ("area_new.dat");
 
+  double area = area_calc(radius);	// standard area formula
+
+  aout << setprecision(precision) <<"radius = " << radius << ",  area = " << area << ", precision = "<< precision <<endl;
+
+  cout << "Results outputted to area_new.dat" << endl;
+
+  }
+  else
+  {
+  cout << "invlaid input, please enter radius and precision larger than 0, and an integer precision" <<endl;
+  }
   return 0;			// "0" for successful completion
 }
 
