@@ -1,0 +1,252 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      6806,        242]
+NotebookOptionsPosition[      4847,        181]
+NotebookOutlinePosition[      5810,        211]
+CellTagsIndexPosition[      5767,        208]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Eigenvalues of a Spherical Square Well", "Subtitle",
+ TextAlignment->Center,
+ TextJustification->0],
+
+Cell["\<\
+In this notebook, we compute the eigenvalues En of the potential with V = -V0 \
+for r<R and V=0 for r>R.  The derivation can be found in any graduate and \
+many undergraduate quantum mechanics texts.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["l=0", "Section"],
+
+Cell["\<\
+The l=0 case is quite simple.  Inside the well, the radial function has the \
+form u(r) = A Sin[kp*r], with kp given by\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"kp", ":=", 
+  FractionBox[
+   SqrtBox[
+    RowBox[{"2", " ", "mu", " ", 
+     RowBox[{"(", 
+      RowBox[{"V0", "+", "En"}], ")"}]}]], "hbar"]}]], "Input"],
+
+Cell["\<\
+while outside the well the radial function has the form u(r) = B \
+Exp[-kappa*r], with kappa given by\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"kappa", ":=", 
+  FractionBox[
+   SqrtBox[
+    RowBox[{
+     RowBox[{"-", "2"}], " ", "mu", " ", "En"}]], "hbar"]}]], "Input"],
+
+Cell["\<\
+In these definitions, V0 > 0 and En < 0, mu is the reduced mass and hbar is \
+Planck's constant divided by 2\[Pi].   The eigenvalue condition is found by \
+matching the radial wave function and its derivative (or, equivalently, its \
+logarithmic derivative) at r = R.  This implies that the function f(En):\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"f", "[", "En_", "]"}], ":=", 
+  RowBox[{
+   FractionBox["kappa", "kp"], "+", 
+   FractionBox["1", 
+    RowBox[{"Tan", "[", 
+     RowBox[{"kp", " ", "R"}], "]"}]]}]}]], "Input"],
+
+Cell["\<\
+is zero at eigenvalues En.  We can plot this function to see graphically \
+where the eigenvalues lie and then use FindRoot to get numerical values.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell["A specific case", "Subsection"],
+
+Cell["Set the mass and hbar to simple values:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"hbar", "=", "1"}], ";", " ", 
+  RowBox[{"mu", "=", "1"}], ";"}]], "Input"],
+
+Cell["Choose a particular square well:", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"R", "=", "1"}], ";", " ", 
+  RowBox[{"V0", "=", "20"}], ";"}]], "Input"],
+
+Cell["\<\
+Now plot f[En] in the acceptable range for bound states (-V0 < En < 0):\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{"f", "[", "En", "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"En", ",", 
+     RowBox[{"-", "V0"}], ",", "0"}], "}"}]}], "]"}]], "Input"],
+
+Cell[TextData[{
+ "We can see  bound state eigenvalues, near -16 and -6.  (Don't confuse the \
+straight lines ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " draws to connect -\[Infinity] and +\[Infinity] with places where f[En] has \
+a zero.)  Look up FindRoot in the Help Browser to see the possible options.  \
+Here we apply Findroot with a guess AND bounds on where the root is expected \
+(this is one reason to ALWAYS make a plot first):"
+}], "Text"],
+
+Cell[BoxData[
+ RowBox[{"E1", " ", "=", " ", 
+  RowBox[{"En", " ", "/.", " ", 
+   RowBox[{"FindRoot", "[", 
+    RowBox[{
+     RowBox[{"f", "[", "En", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"En", ",", 
+       RowBox[{"-", "16"}], ",", 
+       RowBox[{"-", "20"}], ",", 
+       RowBox[{"-", "15"}]}], "}"}]}], "]"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"E2", "=", 
+  RowBox[{"En", " ", "/.", " ", 
+   RowBox[{"FindRoot", "[", 
+    RowBox[{
+     RowBox[{"f", "[", "En", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"En", ",", 
+       RowBox[{"-", "6"}], ",", 
+       RowBox[{"-", "15"}], ",", "0"}], "}"}]}], "]"}]}]}]], "Input"],
+
+Cell["\<\
+If we want a lot of digits, we could try using N[expression, digits]:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{"E1", ",", "16"}], "]"}]], "Input"],
+
+Cell["\<\
+but that doesn't work.  We can verify that these quantities have 16 digits of \
+precision:\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{"Precision", "[", "E1", "]"}]], "Input"],
+
+Cell["Instead of N, use NumberForm:", "Text"],
+
+Cell[BoxData[
+ RowBox[{"NumberForm", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"E1", ",", "E2"}], "}"}], ",", "16"}], "]"}]], "Input"],
+
+Cell["or ScientificForm:", "Text"],
+
+Cell[BoxData[
+ RowBox[{"ScientificForm", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"E1", ",", "E2"}], "}"}], ",", "16"}], "]"}]], "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowToolbars->"EditBar",
+WindowSize->{952, 847},
+WindowMargins->{{76, Automatic}, {59, Automatic}},
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"Magnification"->1,
+"PaperOrientation"->"Portrait",
+"PaperSize"->{612, 792},
+"PostScriptOutputFile":>FrontEnd`FileName[{$RootDirectory, "home", "furnstah",
+    "Teaching", "Computational_Physics", "class", "session_6"}, 
+  "square_well.nb.ps", CharacterEncoding -> "iso8859-1"],
+"PrintCellBrackets"->False,
+"PrintMultipleHorizontalPages"->False,
+"PrintRegistrationMarks"->True,
+"PrintingMargins"->{{54, 54}, {72, 72}}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+Magnification->1.5,
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 20, \
+2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 105, 2, 76, "Subtitle"],
+Cell[687, 26, 223, 4, 105, "Text"],
+Cell[CellGroupData[{
+Cell[935, 34, 22, 0, 119, "Section"],
+Cell[960, 36, 143, 3, 76, "Text"],
+Cell[1106, 41, 179, 6, 78, "Input"],
+Cell[1288, 49, 125, 3, 76, "Text"],
+Cell[1416, 54, 149, 5, 78, "Input"],
+Cell[1568, 61, 330, 5, 135, "Text"],
+Cell[1901, 68, 211, 7, 73, "Input"],
+Cell[2115, 77, 171, 3, 76, "Text"],
+Cell[CellGroupData[{
+Cell[2311, 84, 37, 0, 65, "Subsection"],
+Cell[2351, 86, 55, 0, 69, "Text"],
+Cell[2409, 88, 109, 3, 58, "Input"],
+Cell[2521, 93, 48, 0, 69, "Text"],
+Cell[2572, 95, 107, 3, 58, "Input"],
+Cell[2682, 100, 95, 2, 69, "Text"],
+Cell[2780, 104, 192, 6, 58, "Input"],
+Cell[2975, 112, 461, 9, 181, "Text"],
+Cell[3439, 123, 334, 10, 58, "Input"],
+Cell[3776, 135, 299, 9, 58, "Input"],
+Cell[4078, 146, 93, 2, 69, "Text"],
+Cell[4174, 150, 79, 2, 58, "Input"],
+Cell[4256, 154, 114, 3, 69, "Text"],
+Cell[4373, 159, 63, 1, 58, "Input"],
+Cell[4439, 162, 45, 0, 69, "Text"],
+Cell[4487, 164, 138, 4, 58, "Input"],
+Cell[4628, 170, 34, 0, 69, "Text"],
+Cell[4665, 172, 142, 4, 58, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
