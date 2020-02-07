@@ -23,12 +23,12 @@ set ylabel 'log10(diff/average)'
 set key left
 
 # set the x and y axis scales (already logs)
-set xrange [0.9:6]
-set yrange [-1.7:0]
+set xrange [1.8:10.2]
+set yrange [-8:0]
 
 # fit the curve
 f1(x) = a1*x + b1
-fit [2.5:6] f1(x) "sum_up_down.dat" using ($2):($3) via a1,b1 
+fit [2:7] f1(x) "sum_up_down.dat" using ($2):($3) via a1,b1 
 fit_title1 = sprintf("%-+4.1f*x %-+4.1f",a1,b1)
 
 # plot the data as well as the fit, with appropriate titles 
