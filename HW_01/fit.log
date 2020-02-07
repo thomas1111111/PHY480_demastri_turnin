@@ -229,3 +229,40 @@ correlation matrix of the fit parameters:
                 a1     b1     
 a1              1.000 
 b1             -0.935  1.000 
+
+
+*******************************************************************************
+Fri Feb  7 13:18:44 2020
+
+
+FIT:    data read from "sum_up_down.dat" using ($2):($3)
+        format = x:z
+        x range restricted to [2.00000 : 7.00000]
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f1(x)
+	f1(x) = a1*x + b1
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a1            b1           
+   0 5.9797516736e+02   0.00e+00  3.48e+00    1.000000e+00   1.000000e+00
+   4 1.8004313294e+00  -2.20e-01  3.48e-04    1.152258e+00  -9.649839e+00
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 1.80043
+rel. change during last iteration : -2.20063e-06
+
+degrees of freedom    (FIT_NDF)                        : 4
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.670901
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.450108
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a1              = 1.15226          +/- 0.1604       (13.92%)
+b1              = -9.64984         +/- 0.7719       (7.999%)
+
+correlation matrix of the fit parameters:
+                a1     b1     
+a1              1.000 
+b1             -0.935  1.000 
