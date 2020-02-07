@@ -1,0 +1,99 @@
+//filename: sum_up_down.cpp
+//
+//author: Thomas DeMastri email: demastri@msu.edu
+//
+//Revision History:
+//
+//Created 2/6/2020, 4:56 P.M.
+//
+//Changes:
+//
+// 2/6/2020:
+//--created an s_up and s_down function, comparing the methods specified in 
+//  Landau-Paez problem 3.4 in float precision (~1e-8)
+//--wrote the main function which calculates s_up and s_down values for several 
+//  values of N increasing exponentially (powers of 2), and stores log(error) in 
+//  a .dat file
+//
+//***************************************************************//
+
+#include <iomanip>
+#include <fstream>
+using namespace std;		//all of the packages I think I'll need
+#include <iostream>
+#include <cmath>
+
+
+float
+s_up (int N)
+{
+  float tol = 1e-8;		//This is single precision tolerance, used to tell if n is larger than N or not
+  float n = 1.0;		//For s_up, we start at 1 and work up to N
+  float sum = 0.0;		//Our starting value for the sum is 0.0 (all floats by choice of the problem)
+  while ((n - 1. * N) < tol)
+    {
+      sum = sum + 1. / n;
+      n = n + 1.0;
+    }
+
+  return (sum);
+
+}
+
+
+float
+s_down (int N)
+{
+  float tol = 1e-8;		//We need the same tolerance as before, this time to chec k if n is smaller than one or not.
+  float n = 1. * N;		//For s_down, we start at 1 and work up to N
+  float sum = 0.0;		//Our starting value for the sum is 0.0 (all floats by choice of the problem)
+  while ((n - 1) > tol)
+    {
+      sum = sum + 1. / n;
+      n = n - 1.0;
+    }
+
+  return (sum);
+
+}
+
+
+int
+main ()
+{
+  //This program will calculate sum_up and sum_down for various values of N
+  //I've chosen to start N at a 'low' value of 10 and scale N by powers of 2
+  //so that things are evenly spaced on the log-log plot
+  
+  //let's declare some things we're going to use later:
+  float sum_up;
+  float sum_down;
+  float diff;
+
+  //This is our starting value of N
+  int N = 10;
+
+  ofstream sumout ("sum_up_down.dat");
+
+  sumout << "     N       log(N)     log(diff)" << endl;
+
+  while (N < 1e6)
+    {  
+      sum_up = s_up(N);	//calculate our sum up and down values
+      sum_down = s_down (N);
+
+      diff = fabs (sum_up - sum_down) / (0.5 * (fabs (sum_up) + fabs (sum_down)));	//the difference divided by the average, as the problem specifies
+
+
+      //write out the N, log(N), and the difference to our data file
+      sumout << fixed << setprecision (8) << setw (8) << N << " "
+	<< scientific << setprecision (8)
+	<< setw (8) << log10 (N) << " " << setw (8) << log10 (diff) << endl;
+
+      //increment N exponentially so it's nicely spaced on our log-log plot
+      N = N * 2;
+    }
+
+
+  return (0);
+}
