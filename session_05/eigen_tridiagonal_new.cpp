@@ -65,22 +65,25 @@ double V_ho (double r);
 int
 main ()
 {
-  double Rmax = 4;
+  // Choose Rmax (maximum radius)
+  double Rmax = 5.;
+
+  // Pick the value of the number of steps N 
+  int N = 4;
   // The matrix dimension is N-1 (see the notes).
-  int dimension = -1;
+  int dimension = N - 1;
 
-  ofstream eigout ("eigen_tridiagonal.dat");
-  eigout << setw (10) << "N" << setw (10) << "lambda" << setw(10) <<"logN" << setw(10) << " logerror" << endl;
+  // Calculate h = Delta x
+  double h = Rmax / double (N);
+  double hsq = sqr (h);
+
+  ofstream eigout ("eigen_tridiagonal_error.dat");
+  eigout << endl << "#   N       lambda_1        err" << endl;
 
 
-  for (int N = 2; N < 1025; N = N * 2)
+  while (N < 1025)
     {
-      cout << N << endl;
       dimension = N - 1;
-
-      // Calculate h = Delta x
-      double h = Rmax / double (N);
-      double hsq = sqr (h);
 
       // See the GSL documentation for matrix, vector structures 
       //  Define and allocate space for the vectors, matrices, and workspace 
@@ -95,6 +98,8 @@ main ()
 
       // Load the Hamiltonian matrix pointed to by Hmat_ptr
       //  The elements are labeled from 1 to N-1, but stored from 0 to N-2  
+
+
       for (int i = 1; i <= dimension; i++)
 	{
 	  for (int j = 1; j <= dimension; j++)
@@ -135,16 +140,28 @@ main ()
       // Allocate a pointer to one of the eigenvectors of the matrix 
       gsl_vector *eigenvector_ptr = gsl_vector_alloc (dimension);
       
-      double eigenvalue = gsl_vector_get (Eigval_ptr, 0);
-      gsl_matrix_get_col (eigenvector_ptr, Eigvec_ptr, 0);
-      cout << eigenvalue << endl;
-      eigout << setw (10) << N << setw (10) << eigenvalue << setw (10) << log10(N) << setw (10) << log10(fabs((eigenvalue-1.5)/1.5)) << endl;
+      
+      for (int i = 1; i <= dimension; i++)
+	{
+	  double eigenvalue = gsl_vector_get (Eigval_ptr, i - 1);
+	  gsl_matrix_get_col (eigenvector_ptr, Eigvec_ptr, i - 1);
+
+	  // Print out the eigenvector with the lowest eigenvalue to a file
+	  if (i == 1)
+	    {
+	      eigout << scientific << setprecision(4) << N*1. << " "<< setprecision(8) <<eigenvalue << "   " <<
+              setprecision(8) << fabs ((eigenvalue - 1.5) / 1.5) << endl;
+	    }
+	}
+
+
       // free the space used by the vector and matrices  and workspace 
       gsl_matrix_free (Eigvec_ptr);
       gsl_vector_free (Eigval_ptr);
       gsl_matrix_free (Hmat_ptr);
       gsl_vector_free (eigenvector_ptr);
       gsl_eigen_symmv_free (worksp);
+      N = N*2;
     }
   return (0);			// successful completion 
 }
