@@ -1,0 +1,37 @@
+# HW grading scale: check(++) --> excellent (good code and analysis AND also completed bonus problem)  
+#                   check(+) --> excellent (good code and analysis)  
+#                   check    --> satisfactory (minor shortcomings in code and/or analysis)
+#                   check(-) --> significant problems w/code or analysis
+
+1) Problem 1 (area.cpp embellishments): 
+
+Your code looks great.  
+
+2)Problem 2 (sum up/down): 
+
+Your figure looks right and your analysis is correct-- it's 
+just a bit more complicated version of the 1+eps+eps... vs eps + eps +...+1 
+problem we did in class. So the downward sum is more precise.  
+
+3) Problem 3 (bessel functions): 
+
+Your code looks good and the analysis is correct regarding regions in x where the two
+schemes substantially disagree with each other. Note that the relative error plot
+doesn't tell you WHICH result (upward or downward recursion) is more reliable. How could
+you determine which one is best in each region of x? (Hint: GSL)  
+
+(Sidenote: If interested, you can understand numerical value of the slope between x=1 and 10
+using the short-distance x << l expressions of the spherical bessel and neumann functions. See Ch. 4 
+notes. I wonder if one can play similar games for the VERY steep 
+region above x = 30 using the asymptotic x >> l expressions for jl(x) and nl(x).)
+
+
+4) Extra problem (roundoff distribution):
+NA
+
+##### HW grade = check(+) 
+
+Your codes look good and you hit most of the points 
+asked for in the analysis. 
+
+Upgrade your grade: Complete bonus problem for a check(++).  
