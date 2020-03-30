@@ -48,7 +48,7 @@ main (void)
   const int N = 1;		// size of arrays of y functions
   double y_euler[N], y_rk4[N];	// arrays of y functions 
 
-  ofstream out ("diffeq_test.dat");	// open the output file 
+  ofstream out ("diffeq_test_h.dat");	// open the output file 
 
   funct_parameters.alpha = 1.;	// function parameter to be passed 
   funct_parameters.beta = 1.;	// function parameter to be passed
@@ -56,35 +56,33 @@ main (void)
 
   //double tmin = 0.;		// starting t value 
   //double tmax = 3.;		// last t value 
-  y_euler[0] = exact_answer (1., params_ptr);
-  y_rk4[0] = exact_answer(1., params_ptr);
+  y_euler[0] = 1.0;		// initial condition for y(t) 
+  y_rk4[0] = 1.0;		// initial condition for y(t) 
 
   // print out a header line and the first set of points 
-  out << "#      t                 y_euler(t)               y_rk4(t)              y_exact(t) \n";
+  out << "#      h                y_rk4(t+h=1)                exact(t+h)\n";
   //out << scientific << setprecision (16)
-    //<< tmin << "  "
-    //<< y_euler[0] << "  "
+  //  << tmin << "  "
+   // << y_euler[0] << "  "
     //<< y_rk4[0] << "  " << exact_answer (tmin, params_ptr) << endl;
- 
-  double t = 1.;
 
-  for (double h = 0.1; h>=10e-14;h=h*0.1)
+  double t = 0.2;
+  for (double h = 0.1; h >= 10e-12; h = h*0.1)
   {
 
-  y_euler[0] = exact_answer (t, params_ptr);
-  y_rk4[0] = exact_answer(t, params_ptr);
-  
-  euler (N, t, y_euler, h, rhs, params_ptr);	// Euler's algorithm 
-  runge4 (N, t, y_rk4, h, rhs, params_ptr);	        // 4th order R-K 
+    // find y(t+h) and output vs. t+h 
+    euler (N, t+h, y_euler, h, rhs, params_ptr);	// Euler's algorithm 
 
-  out << scientific << setprecision (16)
-      << h << "  "
-      << y_euler[0] << "  "
-      << y_rk4[0] << "  " << exact_answer (t + h, params_ptr) << endl;
-  
+    runge4 (N, t+h, y_rk4, h, rhs, params_ptr);	        // 4th order R-K 
+
+    out << scientific << setprecision (16)
+    << h << "  "
+    << y_rk4[0] << "  "
+    << exact_answer(t+h,params_ptr)
+    << endl;
   }
 
-  cout << "data stored in diffeq_test.dat\n";
+  cout << "data stored in diffeq_test_h.dat\n";
   out.close ();			// close the output file 
 
   return (0);			// successful completion 

@@ -34,8 +34,13 @@ using namespace std;
 
 #include "GslHamiltonian.h"	// include the Hamiltonian class definitions
 
-inline double sqr(double x) {return x*x;};
-double V_ho(double r);
+inline double
+sqr (double x)
+{
+  return x * x;
+};
+
+double V_ho (double r);
 
 //************************** main program ***************************
 int
@@ -43,80 +48,82 @@ main ()
 {
   // Choose Rmax (maximum radius)
   double Rmax = 5.;
-  cout << "Enter maximum radius (Rmax): ";
-  cin >> Rmax;
 
-  // Pick the value of the number of steps N 
-  int N = 0;		
-  cout << "Enter the number of steps (N): ";
-  cin >> N;
+  ofstream eigout ("eigen_tridiagonal_class.dat");
+	  
+  eigout << setw (10) << "N" << setw (10) << "lambda" << setw(10) <<"logN" << setw(10) << " logerror" << endl;
   
-  // Calculate h = Delta r
-  double h = Rmax/double(N);
-  double hsq = sqr(h);
-  
-  // The matrix dimension is N-1 (see the notes).
-  int dimension = N-1;
-
-  // Create the Hamiltonian object called my_hamiltonian
-  Hamiltonian my_hamiltonian(dimension);
-
-  // Load the Hamiltonian matrix 
-  for (int i = 1; i <= dimension; i++)
-  {
-    for (int j = 1; j <= dimension; j++)
+  for (int N = 2; N < 1025; N=N*2)
     {
-      double Hij;
-      if (i == j)                  // diagonal matrix element
-      {
-        double r = double(i)*h;    // radial coordinate
-        Hij = 2./hsq + V_ho(r); 
-      }
-      else if (i == j+1)          // just above the diagonal
-      {
-        Hij = -1./hsq;
-      }
-      else if (i == j-1)          // just below the diagonal
-      {
-        Hij = -1./hsq;
-      }
-      else                        // all the other elements
-      {
-        Hij = 0.;                 
-      }
- 
-      my_hamiltonian.set_element(i,j,Hij);   // set the i,j element to Hij
-    }
-  }
-  
-  // Find eigenvalues and eigenvectors in ascending order
-  my_hamiltonian.find_eigenstuff();
 
+      // Calculate h = Delta r
+      double h = Rmax / double (N);
+      double hsq = sqr (h);
 
-  // Print out the results   
-  for (int i = 1; i <= dimension; i++)
-  {
-    double eigenvalue = my_hamiltonian.get_eigenvalue(i);
+      // The matrix dimension is N-1 (see the notes).
+      int dimension = N - 1;
 
-    cout << "eigenvalue " << i << " = " 
+      // Create the Hamiltonian object called my_hamiltonian
+      Hamiltonian my_hamiltonian (dimension);
+
+      // Load the Hamiltonian matrix 
+      for (int i = 1; i <= dimension; i++)
+	{
+	  for (int j = 1; j <= dimension; j++)
+	    {
+	      double Hij;
+	      if (i == j)	// diagonal matrix element
+		{
+		  double r = double (i) * h;	// radial coordinate
+		  Hij = 2. / hsq + V_ho (r);
+		}
+	      else if (i == j + 1)	// just above the diagonal
+		{
+		  Hij = -1. / hsq;
+		}
+	      else if (i == j - 1)	// just below the diagonal
+		{
+		  Hij = -1. / hsq;
+		}
+	      else		// all the other elements
+	        {
+		  Hij = 0.;
+		}
+
+	      my_hamiltonian.set_element (i, j, Hij);	// set the i,j element to Hij
+	    }
+	}
+
+      // Find eigenvalues and eigenvectors in ascending order
+      my_hamiltonian.find_eigenstuff ();
+      double eigenvalue = my_hamiltonian.get_eigenvalue(1);
+      eigout << setw (10) << N << setw (10) << eigenvalue << setw (10) << log10(N) << setw (10) << log10(fabs((eigenvalue-1.5)/1.5)) << endl;
+
+      // Print out the results   
+      /*for (int i = 1; i <= dimension; i++)
+         {
+         double eigenvalue = my_hamiltonian.get_eigenvalue(i);
+
+         cout << "eigenvalue " << i << " = " 
          << scientific << eigenvalue << endl;
 
-    // Print out the eigenvector with the lowest eigenvalue to a file
-    if (i == 1)
-    {
-      ofstream eigout ("eigen_tridiagonal.dat");  // open an output file
-      eigout << "# 3D harmonic oscillator" << endl;
-      eigout << "# eigenvalue = " << scientific << eigenvalue << endl;
-      eigout << endl << "#   r       u(r)" << endl;
-      eigout << fixed << 0.0 << " " << 0.0 << endl;  // first point is u(0)=0.
-      for (int j = 1; j <= dimension; j++)
-      {
-        eigout << fixed << double(j)*h << " "
-               << scientific << my_hamiltonian.get_eigenvector(i,j) << endl;
-      }
-      eigout.close();  // close the output stream
+         // Print out the eigenvector with the lowest eigenvalue to a file
+         if (i == 1)
+         {
+         ofstream eigout ("eigen_tridiagonal.dat");  // open an output file
+         eigout << "# 3D harmonic oscillator" << endl;
+         eigout << "# eigenvalue = " << scientific << eigenvalue << endl;
+         eigout << endl << "#   r       u(r)" << endl;
+         eigout << fixed << 0.0 << " " << 0.0 << endl;  // first point is u(0)=0.
+         for (int j = 1; j <= dimension; j++)
+         {
+         eigout << fixed << double(j)*h << " "
+         << scientific << my_hamiltonian.get_eigenvector(i,j) << endl;
+         }
+         eigout.close();  // close the output stream
+         }
+         } */
     }
-  }
 
   return (0);			// successful completion 
 }
@@ -133,8 +140,9 @@ main ()
 double
 V_ho (double r)
 {
-  double k = 1./2.;
+  double k = 1. / 2.;
 
-  return (k*r*r/2.);
+  return (k * r * r / 2.);
 }
+
 //**************************************************************

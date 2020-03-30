@@ -70,7 +70,7 @@ main (void)
   double k[numi];              // array of k values from kmin to kmax
   double result[numi];         // array of integral results
   
-  omp_set_num_threads(2);      // Use this or specify the number of threads
+  omp_set_num_threads(1);      // Use this or specify the number of threads
                                // from the cmd line with OMP_NUM_THREADS
 
   start = omp_get_wtime();    // get the start time
