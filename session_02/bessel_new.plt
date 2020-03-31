@@ -1,8 +1,4 @@
 # gnuplot plot file: quad_eq.plt
-
-set term png
-set output "bessel_error.png"
-
 set title 'Bessel_Func Relative Error'
 set xlabel 'x'
 set ylabel "Error(x)"
