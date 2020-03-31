@@ -23,7 +23,7 @@
 #include <fstream>    // file input and output                       
 #include <string>     // C++ strings                                 
 #include <sstream>    // C++ stringstream class (could omit iostream)  
-
+#include <cmath>
 using namespace std;    
 
 //********************************************************************
@@ -129,5 +129,33 @@ main (void)
   cout << "Look at " << my_filename_stream.str() 
        << " to see if this worked." << endl << endl;
 
+  string filename_string;
+  for (int j = 0; j<4; j++)
+  {
+	filename_string = "filenum_"+to_string(j)+".out";
+	ofstream file_test;
+	file_test.open(filename_string.c_str());
+	file_test << "This is file " + to_string(j) << endl;
+	file_test.close();
+  }
+
+  string file_test_string;
+  int num_digits = 3;
+  for (double alpha =5.21934; alpha<10; alpha++)
+  {
+	
+	double alpha_rounded = round(alpha*pow(10,num_digits-1))/pow(10,num_digits-1); 
+	string alpha_string = to_string(alpha_rounded);
+	string alpha_string_rounded = string(1,alpha_string[0])+string(1,alpha_string[1])+string(1,alpha_string[2])+string(1,alpha_string[3]);;
+
+	file_test_string = "file_"+alpha_string_rounded+".out";
+        ofstream file_test;
+        file_test.open(file_test_string.c_str());
+        file_test << "This is file " + alpha_string_rounded << endl;
+        file_test.close();
+  }
+
+  
   return (0);
+
 }

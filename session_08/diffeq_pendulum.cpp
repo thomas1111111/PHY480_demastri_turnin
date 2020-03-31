@@ -167,7 +167,11 @@ main (void)
 
     // open the output file 
     ofstream out;    // declare the output file
-    out.open ("diffeq_pendulum.dat", ofstream::trunc); 
+    double rounded_alpha = round(alpha*pow(10,2-1))/pow(10,2-1);
+    string alpha_string = to_string(rounded_alpha);
+    string alpha_string_rounded = string(1,alpha_string[0])+string(1,alpha_string[1])+string(1,alpha_string[2]); 
+
+    out.open ("diffeq_pendulum"+alpha_string_rounded+".dat", ofstream::trunc); 
 
     // load the force parameters into the structure 
     rhs_parameters.omega0 = omega0;
@@ -227,7 +231,7 @@ main (void)
 
     out << endl;
     out.close ();    // close the output file 
-    cout << "\n results added to diffeq_pendulum.dat\n\n";
+    cout << "\n results added to diffeq_pendulum"+alpha_string_rounded+".dat\n\n";
 
     cout << "Again? (no=0, clear=1) ";
     cin >> answer2;
