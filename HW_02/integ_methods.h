@@ -11,19 +11,9 @@
 //
 
 
-extern double simpsons_rule (int N, double min, double max, double (*integrand) (double x, double A, double k, double b) );
+extern double simpsons_rule (double (*integrand)(double x, void *p), long N, double min, double max, double A);
 
-extern double milnes_rule (int N, double min, double max, double (*integrand) (double x, double A, double k, double b) );
+extern double milnes_rule (double (*integrand)(double x, void *p), long N, double min, double max,double A);
 
-extern double integrand_gsl (double x, void *p);
-
-struct //created solely to satisty the GSL routine
-integ_params
-{
-   double A; //Amplitude
-   double k; //wave number
-   double b; //phase
-};
-
-extern double integrate_gsl(double (integrand) (double x, void *p), integ_params, double min, double max, double eps_abs, double eps_rel);
+extern double integrate_gsl(double (*integrand) (double x, void *p), double min, double max, double eps_abs, double eps_rel, double A);
 
