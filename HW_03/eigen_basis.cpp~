@@ -97,30 +97,28 @@ main ()
 {
   hij_parameters ho_parameters;	// parameters for the Hamiltonian
 
-  ho_parameters.potential_index = 1; //Coulomb potential
+  ho_parameters.potential_index = 1;	//Coulomb potential
 
-  ofstream myout ("eigen_basis.dat");
-
-  
-
-  
   // Set up the harmonic oscillator basis 
   double mass = 1;		// measure mass in convenient units 
-  double b_ho = pow(10,-0.8);
+  double b_ho = pow (10, -0.8);
+  int dimension;
 
-  for (int dimension = 1; dimension<26; dimension++)
+  cout << "Please Enter your chosen dimension: ";
+  cin >> dimension;
 
+
+  ofstream myout ("eigen_basis_dimension_" + to_string (dimension) + "_bho_"+ to_string(b_ho)+".dat");
+  
+
+
+  for (double r = 0.; r < 10.01; r += 0.05)
     {
 
-     for (double r=0; r<10.01; r += 0.05)
-     {
-           
-     ofstream myout ("eigen_basis"+to_string(dimension)+".dat");
+      ho_parameters.mass = mass;
+      ho_parameters.b_ho = b_ho;
 
-     ho_parameters.mass = mass;
-     ho_parameters.b_ho = b_ho;
-      
-   
+
       // See the GSL documentation for matrix, vector structures 
       //  Define and allocate space for the vectors, matrices, and workspace 
       // original gsl matrix with Hamiltonian 
@@ -159,8 +157,6 @@ main ()
       double eigenvalue = gsl_vector_get (Eigval_ptr, 0);
       gsl_matrix_get_col (eigenvector_ptr, Eigvec_ptr, 0);
 
-      myout << setw (10) << dimension << setw (10) << log10 (dimension) << setw (10) <<
-	log10 (fabs ((eigenvalue - (-45.93)) / (-45.93))) << endl;
 
       // Don't print the eigenvectors yet . . .
       // cout << "eigenvector = " << endl;
@@ -168,8 +164,10 @@ main ()
       // {
       //   cout << scientific << gsl_vector_get (eigenvector_ptr, j) << endl;
       // }
+      
+      double u_r = eigenvalue * ho_radial (1, 0, b_ho, r);
 
-
+      myout << setw(8) << r << "   " << setw(8) << u_r << endl;
 
       // free the space used by the vector and matrices  and workspace 
       gsl_matrix_free (Eigvec_ptr);
@@ -177,9 +175,10 @@ main ()
       gsl_matrix_free (Hmat_ptr);
       gsl_vector_free (eigenvector_ptr);
       gsl_eigen_symmv_free (worksp);
-    
-     }  
-   }
+
+    }
+  myout.close ();
+
 
   return (0);			// successful completion 
 }
